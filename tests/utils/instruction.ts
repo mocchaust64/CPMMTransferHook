@@ -207,9 +207,9 @@ export async function setupSwapTest(
     poolState.token0Program,
     poolState.token1Mint,
     poolState.token1Program,
-    new BN(10000000000),
-    new BN(100000000000),
-    new BN(100000000000),
+    new BN(5000000000),
+    new BN(25000000000),
+    new BN(25000000000),
     confirmOptions
   );
   return { configAddress, poolAddress, poolState };
@@ -264,8 +264,8 @@ export async function initialize(
   token1Program: PublicKey,
   confirmOptions?: ConfirmOptions,
   initAmount: { initAmount0: BN; initAmount1: BN } = {
-    initAmount0: new BN(10000000000),
-    initAmount1: new BN(20000000000),
+    initAmount0: new BN(1000000000),
+    initAmount1: new BN(2000000000),
   },
   createPoolFee = new PublicKey("2p3CiCssv21WeTyQDVZZL66UyXByJZd4oqrPyV7tz3qu")
 ) {

@@ -115,7 +115,7 @@ export async function createTokenMintAndAssociatedTokenAccount(
     token0,
     ownerToken0Account.address,
     mintAuthority,
-    100_000_000_000_000,
+    50_000_000_000,
     [],
     { skipPreflight: true },
     token0Program
@@ -146,7 +146,7 @@ export async function createTokenMintAndAssociatedTokenAccount(
     token1,
     ownerToken1Account.address,
     mintAuthority,
-    100_000_000_000_000,
+    50_000_000_000,
     [],
     { skipPreflight: true },
     token1Program
@@ -245,7 +245,7 @@ export async function createTokenMintWithTransferHook(
     token0,
     ownerToken0Account.address,
     mintAuthority,
-    100_000_000_000_000,
+    50_000_000_000,
     [],
     { skipPreflight: true },
     token0Program
@@ -267,7 +267,7 @@ export async function createTokenMintWithTransferHook(
     token1,
     ownerToken1Account.address,
     mintAuthority,
-    100_000_000_000_000,
+    50_000_000_000,
     [],
     { skipPreflight: true },
     token1Program
