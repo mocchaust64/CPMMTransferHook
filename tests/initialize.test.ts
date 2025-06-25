@@ -3,7 +3,7 @@ import { Program, BN } from "@coral-xyz/anchor";
 import { RaydiumCpSwap } from "../target/types/raydium_cp_swap";
 
 import { getAccount, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { setupInitializeTest, initialize, calculateFee } from "./utils";
+import { setupInitializeTest, initialize, calculateFee, createAmmConfig, createTokenMintWithTransferHook } from "./utils";
 import { assert } from "chai";
 
 describe("initialize test", () => {
@@ -179,5 +179,69 @@ describe("initialize test", () => {
         );
       assert(new BN(total.toString()).gte(initAmount1));
     }
+  });
+
+  // Test for token2022 with transfer hook
+  it("create pool with token2022 mint has transfer hook", async () => {
+    const transferHookProgramId = new anchor.web3.PublicKey("BmcmrHRjV2feBspwFsmWWwzNThT5o6sKM1zwoQcjKoG");
+    
+    // Tạo config cho AMM
+    const configAddress = await createAmmConfig(
+      program,
+      anchor.getProvider().connection,
+      owner,
+      0,
+      new BN(10),
+      new BN(1000), 
+      new BN(25000),
+      new BN(100000000),
+      confirmOptions
+    );
+    
+    // Tạo token với transfer hook
+    const [{ token0, token0Program }, { token1, token1Program }] =
+      await createTokenMintWithTransferHook(
+        anchor.getProvider().connection,
+        owner,
+        owner,
+        transferHookProgramId
+      );
+    
+    console.log("Created tokens with TransferHook extension");
+    console.log("Token 0:", token0.toString(), "Program:", token0Program.toString());
+    console.log("Token 1:", token1.toString(), "Program:", token1Program.toString());
+
+    const initAmount0 = new BN(10000000000);
+    const initAmount1 = new BN(10000000000);
+    const { poolAddress, poolState } = await initialize(
+      program,
+      owner,
+      configAddress,
+      token0,
+      token0Program,
+      token1,
+      token1Program,
+      confirmOptions,
+      { initAmount0, initAmount1 },
+      owner.publicKey
+    );
+    
+    console.log("Pool created successfully with tokens that have TransferHook extension");
+    
+    let vault0 = await getAccount(
+      anchor.getProvider().connection,
+      poolState.token0Vault,
+      "processed",
+      poolState.token0Program
+    );
+    assert.equal(vault0.amount.toString(), initAmount0.toString());
+
+    let vault1 = await getAccount(
+      anchor.getProvider().connection,
+      poolState.token1Vault,
+      "processed",
+      poolState.token1Program
+    );
+    assert.equal(vault1.amount.toString(), initAmount1.toString());
   });
 });

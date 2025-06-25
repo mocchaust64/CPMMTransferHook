@@ -26,6 +26,9 @@ const MINT_WHITELIST: [&'static str; 4] = [
     "2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo",
 ];
 
+// Giá trị của TransferHook trong ExtensionType
+const EXTENSION_TYPE_TRANSFER_HOOK: u16 = 10;
+
 pub fn transfer_from_user_to_pool_vault<'a>(
     authority: AccountInfo<'a>,
     from: AccountInfo<'a>,
@@ -196,6 +199,7 @@ pub fn is_supported_mint(mint_account: &InterfaceAccount<Mint>) -> Result<bool> 
         if e != ExtensionType::TransferFeeConfig
             && e != ExtensionType::MetadataPointer
             && e != ExtensionType::TokenMetadata
+            && u16::from(e) != EXTENSION_TYPE_TRANSFER_HOOK
         {
             return Ok(false);
         }

@@ -127,7 +127,7 @@ pub struct Initialize<'info> {
     )]
     pub token_1_vault: UncheckedAccount<'info>,
 
-    /// CHECK: create pool fee account for receiving pool creation fees
+    /// create pool fee account
     #[account(
         mut,
         address= crate::create_pool_fee_reveiver::ID,
