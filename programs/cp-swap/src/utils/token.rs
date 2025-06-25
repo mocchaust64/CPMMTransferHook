@@ -192,15 +192,24 @@ pub fn is_supported_mint(mint_account: &InterfaceAccount<Mint>) -> Result<bool> 
     if mint_whitelist.contains(mint_account.key().to_string().as_str()) {
         return Ok(true);
     }
+    
+    // Luôn cho phép sử dụng token có transfer hook extension
     let mint_data = mint_info.try_borrow_data()?;
     let mint = StateWithExtensions::<spl_token_2022::state::Mint>::unpack(&mint_data)?;
     let extensions = mint.get_extension_types()?;
+    
+    // Cho phép các extension phổ biến và transfer hook
     for e in extensions {
         if e != ExtensionType::TransferFeeConfig
             && e != ExtensionType::MetadataPointer
             && e != ExtensionType::TokenMetadata
             && u16::from(e) != EXTENSION_TYPE_TRANSFER_HOOK
+            && e != ExtensionType::MintCloseAuthority
+            && e != ExtensionType::DefaultAccountState
+            && e != ExtensionType::ImmutableOwner
+            && e != ExtensionType::MemoTransfer
         {
+            msg!("Không hỗ trợ extension: {:?}", e);
             return Ok(false);
         }
     }

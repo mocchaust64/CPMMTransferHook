@@ -316,9 +316,10 @@ export async function initialize(
     false,
     token1Program
   );
+  
   await program.methods
     .initialize(initAmount.initAmount0, initAmount.initAmount1, new BN(0))
-    .accountsPartial({
+    .accounts({
       creator: creator.publicKey,
       ammConfig: configAddress,
       authority: auth,
@@ -326,8 +327,8 @@ export async function initialize(
       token0Mint: token0,
       token1Mint: token1,
       lpMint: lpMintAddress,
-      creatorToken0,
-      creatorToken1,
+      creatorToken0: creatorToken0,
+      creatorToken1: creatorToken1,
       creatorLpToken: creatorLpTokenAddress,
       token0Vault: vault0,
       token1Vault: vault1,
@@ -336,6 +337,7 @@ export async function initialize(
       tokenProgram: TOKEN_PROGRAM_ID,
       token0Program: token0Program,
       token1Program: token1Program,
+      associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
       systemProgram: SystemProgram.programId,
       rent: SYSVAR_RENT_PUBKEY,
     })

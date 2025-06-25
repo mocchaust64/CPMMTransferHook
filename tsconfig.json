@@ -1,9 +1,9 @@
 {
-  "compilerOptions": {
+            "compilerOptions": {
     "target": "es2020",
     "lib": ["es2020", "dom"],
     "types": ["node", "mocha"],
-    "module": "commonjs",
+              "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -16,5 +16,5 @@
   },
   "include": ["./tests", "./scripts"],
   "exclude": ["node_modules"]
-}
+          }
           
